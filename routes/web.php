@@ -20,8 +20,22 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-// Route Tester Admin Template
+//
 Route::get('tes-admin', function () {
-return view('layouts.admin');
+    return view('layouts.admin');
 });
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role::admin']],
+    function () {
+        Route::get('/home', [App\http\Controller\Homecontroller::class, 'index2'])->name('home');
+        Route::get('/', function () {
+            return view('admin.index');
+        });
+    });
+    
+
+Route::group(['prefix' => 'user', 'middleware' => ['auth']],
+    function () {
+        Route::get('/home', [App\http\Controller\Homecontroller::class, 'index2'])->name('home2');
+        });
+    
